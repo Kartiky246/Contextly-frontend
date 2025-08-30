@@ -3,7 +3,7 @@ import './Chat.css';
 import { FaMicrophone } from 'react-icons/fa';
 import { useAuth } from '@clerk/clerk-react';
 import { BsThreeDots } from 'react-icons/bs';
-import { apiUrl } from '../../../src/config/api';
+import { apiUrl } from '../../config/api';
 
 interface Message {
   _id?: string;

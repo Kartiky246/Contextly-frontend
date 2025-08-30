@@ -7,6 +7,7 @@ import type { SessionData } from './Sidebar';
 import CreateSessionModal from '../../components/modal/CreateSession';
 import Chat from '../../components/chat/Chat';
 import { useAuth } from '@clerk/clerk-react';
+import { apiUrl } from '../../config/api';
 
 const Session: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -34,7 +35,7 @@ const Session: React.FC = () => {
           throw new Error('No authentication token found');
         }
 
-        const response = await fetch('http://localhost:3000/api/session/all', {
+  const response = await fetch(apiUrl('/api/session/all'), {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -81,7 +82,7 @@ const Session: React.FC = () => {
       }
 
       // FormData already contains the properly structured data and files
-      const response = await fetch('http://localhost:3000/api/session/create', {
+  const response = await fetch(apiUrl('/api/session/create'), {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
