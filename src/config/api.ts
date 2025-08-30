@@ -1,5 +1,5 @@
 // Central API configuration (root src copy)
-const BASE_API_URL = 'https://contextly-backend-production.up.railway.app';
+const BASE_API_URL = import.meta.env.VITE_API_BASE_URL || 'https://contextly-backend-production.up.railway.app';
 
 export function apiUrl(path: string) {
   const normalized = path.startsWith('/') ? path : `/${path}`;
