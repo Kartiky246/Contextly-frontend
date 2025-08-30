@@ -1,0 +1,381 @@
+.session-container {
+  display: flex;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #343541;
+}
+
+.sidebar {
+  width: 260px;
+  background: #202123;
+  transition: width 0.2s ease;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  padding: 12px;
+  margin: 8px;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-self: flex-end;
+  outline: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.sidebar.collapsed .sidebar-toggle {
+  background: #2d2d3a;
+  margin: 0 12px;
+  padding: 12px;
+  position: relative;
+}
+
+.doc-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doc-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #fb542b;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sidebar-toggle:hover {
+  color: white;
+  background: #2d2d3a;
+}
+
+.sidebar.collapsed .sidebar-toggle:hover {
+  background: #3d3d4a;
+  transform: translateY(-1px);
+}
+
+.sidebar-toggle:focus {
+  outline: none;
+}
+
+.sidebar-toggle.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sidebar-toggle.disabled:hover {
+  background: none;
+  transform: none;
+}
+
+.sidebar.collapsed {
+  width: 64px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 16px;
+}
+
+.sidebar-content {
+  padding: 0 8px;
+}
+
+.main-header {
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  z-index: 10;
+}
+
+.create-session-button {
+  background: #fb542b;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(251, 84, 43, 0.25);
+}
+
+.create-session-button:hover {
+  background: #e64a27;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(251, 84, 43, 0.3);
+}
+
+.create-session-button:active {
+  transform: translateY(0);
+}
+
+.create-session-button span {
+  margin-top: 1px;
+}
+
+.session-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.session-item {
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.session-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.session-item.selected {
+  background: rgba(251, 84, 43, 0.15);
+  border-color: #fb542b;
+}
+
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.session-name {
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.session-status {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.session-status.ready {
+  background: #2ea043;
+  color: white;
+}
+
+.session-status.not-ready {
+  background: #773333;
+  color: #ff6b6b;
+}
+
+.session-context {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.context-date {
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.pdf-list {
+  display: flex;
+  gap: 8px;
+}
+
+.pdf-link {
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.pdf-link:hover {
+  color: #ff9800;
+}
+
+
+.session-main {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* let children take full width */
+  padding: 0 60px; /* slightly reduced to allow full width */
+  transition: padding 0.2s ease;
+  min-height: calc(100vh - 70px);
+  overflow: hidden;
+  padding-right:0px
+}
+
+.main-content {
+  width: 100%;
+  max-width: none; /* allow chat to use full available width */
+}
+
+.zero-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.zero-state-title {
+  color: white;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.zero-state-description {
+  color: #a0aec0;
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.zero-state-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: #fb542b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(251, 84, 43, 0.25);
+}
+
+.zero-state-button:hover {
+  background: #e64a27;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(251, 84, 43, 0.3);
+}
+
+.zero-state-button:active {
+  transform: translateY(0);
+}
+
+.session-select-prompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #8e8ea0;
+  font-size: 1.1rem;
+  text-align: center;
+  width: 100%;
+}
+
+.session-content-area {
+  height: 100%;
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+.session-content {
+  width: 100%;
+  padding: 2rem;
+  background: #343541;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+}
+
+.session-content h1 {
+  font-size: 2.5rem;
+  color: #ff9800;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.user-info {
+  background: #232323;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  border: 1px solid #181818;
+}
+
+.user-info h2 {
+  font-size: 1.8rem;
+  color: #ff9800;
+  margin-bottom: 1rem;
+}
+
+.user-info p {
+  color: #ffb74d;
+  font-size: 1.1rem;
+}
+
+.session-body {
+  background: #181818;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+  border: 1px solid #232323;
+}
+
+.session-body p {
+  color: #ffb74d;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .session-content {
+    padding: 1rem;
+  }
+  
+  .session-content h1 {
+    font-size: 2rem;
+  }
+  
+  .user-info,
+  .session-body {
+    padding: 1.5rem;
+  }
+  
+  .user-info h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Loading state */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.2rem;
+  color: #ff9800;
+}

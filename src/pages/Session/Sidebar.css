@@ -1,0 +1,147 @@
+
+
+/* Sidebar: solid black/grey, professional look */
+.sidebar {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  bottom: 0;
+  width: 260px;
+  background: #202123;
+  color: #ececf1;
+  box-shadow: 2px 0 12px rgba(0,0,0,0.18);
+  transition: width 0.3s cubic-bezier(.4,0,.2,1);
+  z-index: 1100;
+  overflow-y: auto;
+}
+.sidebar.collapsed {
+  width: 56px;
+}
+.sidebar-toggle {
+  position: absolute;
+  top: 16px;
+  left: 12px;
+  background: transparent;
+  color: #ececf1;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1200;
+}
+.sidebar-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+.sidebar-content {
+  padding: 2.5rem 1rem 1.5rem 1rem;
+}
+.sidebar-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  color: #ececf1;
+  text-align: left;
+}
+.session-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.session-item {
+  background: #2d2d3a;
+  border-radius: 10px;
+  margin-bottom: 1.2rem;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.session-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ececf1;
+}
+.session-status {
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  background: #181818;
+  color: #fb542b;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+}
+.session-status.ready {
+  background: #fb542b;
+  color: #fff;
+}
+.session-status.not-ready {
+  background: #232323;
+  color: #fb542b;
+}
+.session-context {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.context-date {
+  font-size: 0.9rem;
+  color: #ffb74d;
+}
+.pdf-list {
+  display: flex;
+  gap: 0.5rem;
+}
+.pdf-link {
+  color: #fb542b;
+  font-size: 1.3rem;
+  transition: color 0.2s;
+}
+.pdf-link:hover {
+  color: #ffb74d;
+}
+.pdf-icon {
+  vertical-align: middle;
+  font-size: 1.3rem;
+}
+@media (max-width: 900px) {
+  .sidebar {
+    width: 200px;
+  }
+  .sidebar.collapsed {
+    width: 48px;
+  }
+  .sidebar-content {
+    padding: 2rem 0.5rem 1rem 0.5rem;
+  }
+}
+@media (max-width: 600px) {
+  .sidebar {
+    width: 100vw;
+    top: 60px;
+    left: 0;
+    right: 0;
+    height: 40vh;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+  .sidebar.collapsed {
+    width: 56px;
+    height: 40vh;
+  }
+  .sidebar-toggle {
+    top: -40px;
+    left: 16px;
+    right: auto;
+  }
+}
