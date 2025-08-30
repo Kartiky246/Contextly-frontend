@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { FaPlus, FaFileUpload } from 'react-icons/fa';
+import { FaFileUpload } from 'react-icons/fa';
 import Modal from './Modal';
 import './CreateSession.css';
 
