@@ -1,0 +1,126 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fb542b;
+  box-shadow: 0 2px 8px -1px rgba(251, 84, 43, 0.18);
+  z-index: 1000;
+  height: 70px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 2rem;
+  height: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.brand-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.025em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding-right: 2rem;
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.new-session-button {
+  background: white;
+  color: #fb542b;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.new-session-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.plus-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.user-greeting {
+  font-size: 1rem;
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+}
+
+.logout-button {
+  background: linear-gradient(90deg, #f7c873 0%, #eebbc3 100%);
+  color: #232946;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.logout-button:hover {
+  background: linear-gradient(90deg, #eebbc3 0%, #f7c873 100%);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+}
+
+.logout-button:active {
+  transform: translateY(0) scale(1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .header-content {
+    padding: 0 1rem;
+  }
+  
+  .brand-name {
+    font-size: 1.5rem;
+  }
+  .user-greeting {
+    font-size: 0.85rem;
+    color: #f7c873;
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+  }
+  .logout-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
