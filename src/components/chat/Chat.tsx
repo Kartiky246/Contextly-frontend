@@ -4,10 +4,16 @@ import { useAuth } from '@clerk/clerk-react';
 import { BsThreeDots } from 'react-icons/bs';
 import { apiUrl } from '../../config/api';
 
+interface Segment {
+  type: 'text' | 'source' | 'link' | string;
+  value: string;
+}
+
 interface Message {
   _id?: string;
   role: 'user' | 'assistant';
-  content: string;
+  // content can be plain string (legacy) or an array of typed segments
+  content: string | Segment[];
   sessionId?: string;
   userId?: string;
   __v?: number;
@@ -26,8 +32,8 @@ const Chat: React.FC<ChatProps> = ({ sessionId }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
-  const [streamedResponse, setStreamedResponse] = useState('');
-  const completeResponseRef = useRef('');
+  const [streamedResponse, setStreamedResponse] = useState<Segment[]>([]);
+  const completeResponseRef = useRef<Segment[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { getToken } = useAuth();
 
@@ -55,8 +61,8 @@ const Chat: React.FC<ChatProps> = ({ sessionId }) => {
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     setIsStreaming(true);
-    setStreamedResponse('');
-    completeResponseRef.current = '';
+  setStreamedResponse([]);
+  completeResponseRef.current = [];
 
     try {
       const token = await getToken();
@@ -86,25 +92,66 @@ const Chat: React.FC<ChatProps> = ({ sessionId }) => {
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
-        
+
         const chunk = decoder.decode(value);
-        // Split by newlines to handle multiple data chunks
+        // Split by newlines to handle multiple JSON objects per chunk
         const lines = chunk.split('\n');
-        
+
         lines.forEach(line => {
-          // Check if line starts with "data: " and extract the content
-          if (line.startsWith('data: ')) {
-            const content = line.substring(6); // Remove "data: " prefix
-            completeResponseRef.current += content + ' '; // Build complete response
-            setStreamedResponse(completeResponseRef.current); // Update displayed response
+          const trimmed = line.trim();
+          if (!trimmed) return;
+          // If the stream uses SSE style with "data: " prefix, strip it
+          const raw = trimmed.startsWith('data: ') ? trimmed.substring(6) : trimmed;
+
+          try {
+            const obj = JSON.parse(raw);
+            let t: string = obj.type || 'text';
+            const v: string = obj.value || '';
+
+            // Handle common typo
+            if (t === 'socure') t = 'source';
+
+            // Merge consecutive text segments for nicer display
+            const segs = completeResponseRef.current;
+            if (t === 'text') {
+              const last = segs[segs.length - 1];
+              if (last && last.type === 'text') {
+                last.value += v;
+              } else {
+                segs.push({ type: 'text', value: v });
+              }
+            } else if (t === 'source' || t === 'link') {
+              segs.push({ type: t as 'source' | 'link', value: v });
+            } else {
+              // unknown types - treat as text
+              const last = segs[segs.length - 1];
+              if (last && last.type === 'text') {
+                last.value += v;
+              } else {
+                segs.push({ type: 'text', value: v });
+              }
+            }
+
+            // update visible streamed response
+            setStreamedResponse([...completeResponseRef.current]);
+          } catch (err) {
+            // Not JSON, append raw text to last text segment
+            const segs = completeResponseRef.current;
+            if (segs.length === 0 || segs[segs.length - 1].type !== 'text') {
+              segs.push({ type: 'text', value: raw });
+            } else {
+              segs[segs.length - 1].value += raw;
+            }
+            setStreamedResponse([...completeResponseRef.current]);
           }
         });
       }
 
-      // Once streaming is complete, add the full message to messages array
-      const assistantMessage: Message = { role: 'assistant', content: completeResponseRef.current.trim() };
+      // Once streaming is complete, add the full message (as segments) to messages array
+      const assistantMessage: Message = { role: 'assistant', content: completeResponseRef.current };
       setMessages(prev => [...prev, assistantMessage]);
-      setStreamedResponse('');
+      setStreamedResponse([]);
+      completeResponseRef.current = [];
       setIsStreaming(false);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -152,14 +199,44 @@ const Chat: React.FC<ChatProps> = ({ sessionId }) => {
             className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
           >
             <div className="message-content">
-              {message.content}
+              {/* Render content which may be legacy string or Segment[] */}
+              {typeof message.content === 'string' ? (
+                message.content
+              ) : (
+                (message.content as Segment[]).map((seg, i) => {
+                  if (seg.type === 'source') {
+                    return (
+                      <span key={i} className="message-source">{seg.value}</span>
+                    );
+                  }
+
+                  if (seg.type === 'link') {
+                    return (
+                      <a key={i} className="message-link" href={seg.value} target="_blank" rel="noopener noreferrer">{seg.value}</a>
+                    );
+                  }
+
+                  // default text
+                  return <span key={i}>{seg.value}</span>;
+                })
+              )}
             </div>
           </div>
         ))}
         {isStreaming && (
           <div className="message assistant-message">
             <div className="message-content">
-              {streamedResponse || (
+              {streamedResponse.length > 0 ? (
+                streamedResponse.map((seg, i) => {
+                  if (seg.type === 'source') {
+                    return <span key={i} className="message-source">{seg.value}</span>;
+                  }
+                  if (seg.type === 'link') {
+                    return <a key={i} className="message-link" href={seg.value} target="_blank" rel="noopener noreferrer">{seg.value}</a>;
+                  }
+                  return <span key={i}>{seg.value}</span>;
+                })
+              ) : (
                 <div className="loading-dots">
                   <BsThreeDots />
                 </div>

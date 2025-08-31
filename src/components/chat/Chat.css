@@ -71,6 +71,23 @@
   border-bottom-left-radius: 4px;
 }
 
+/* Source block styling: italic and gray to indicate citation/source */
+.message-source {
+  display: block;
+  font-style: italic;
+  color: #9aa0a6;
+  background: transparent;
+  margin-top: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+/* Links inside messages */
+.message-link {
+  color: #7cc4ff;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
 .loading-dots {
   display: flex;
   align-items: center;
