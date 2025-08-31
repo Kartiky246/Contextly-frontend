@@ -6,9 +6,10 @@ import { FaPlus, FaUserCircle, FaLock } from 'react-icons/fa';
 
 interface HeaderProps {
   onNewSession?: () => void;
+  showNewSession?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ onNewSession }) => {
+const Header: React.FC<HeaderProps> = ({ onNewSession, showNewSession = true }) => {
   const { user } = useUser();
 
   return (
@@ -19,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({ onNewSession }) => {
         </div>
         
         <div className="header-right">
-          <div className="user-section">
+          <div className={showNewSession ? 'user-section border-right' : 'user-section'}>
             <div className="user-avatar" title={user?.firstName || user?.emailAddresses[0].emailAddress || ''}>
               <FaUserCircle size={20} />
             </div>
@@ -29,10 +30,12 @@ const Header: React.FC<HeaderProps> = ({ onNewSession }) => {
               </button>
             </SignOutButton>
           </div>
-          <button className="new-session-button" onClick={onNewSession}>
-            <FaPlus size={14} />
-            <span>New Session</span>
-          </button>
+          {showNewSession && (
+            <button className="new-session-button" onClick={onNewSession}>
+              <FaPlus size={14} />
+              <span>New Session</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

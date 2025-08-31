@@ -110,7 +110,7 @@ const Session: React.FC = () => {
 
   return (
     <>
-      <Header onNewSession={() => setIsCreateModalOpen(true)} />
+      <Header onNewSession={() => setIsCreateModalOpen(true)} showNewSession={sessions.length > 0} />
       <CreateSessionModal 
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
