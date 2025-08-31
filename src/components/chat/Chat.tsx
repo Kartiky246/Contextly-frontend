@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chat.css';
-import { FaMicrophone } from 'react-icons/fa';
 import { useAuth } from '@clerk/clerk-react';
 import { BsThreeDots } from 'react-icons/bs';
 import { apiUrl } from '../../config/api';
@@ -186,9 +185,6 @@ const Chat: React.FC<ChatProps> = ({ sessionId }) => {
             }}
           />
           <div className="chat-input-actions">
-            <button className="chat-input-button voice">
-              <FaMicrophone />
-            </button>
             <button 
               className="chat-input-button send"
               onClick={handleSendMessage}
