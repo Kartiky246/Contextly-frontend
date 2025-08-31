@@ -179,7 +179,81 @@ const Chat: React.FC<ChatProps> = ({ sessionId }) => {
         }
 
         const data: ChatResponse = await response.json();
-        setMessages(data.chat || []);
+
+        // Helper to parse inline tags like <linkStart>...</linkEnd> and <sourceStart>...</sourceStart>
+        const parseInlineTags = (text: string): Segment[] => {
+          const segs: Segment[] = [];
+          let cursor = 0;
+          const openTagRegex = /<\s*(linkStart|LinkStart|sourceStart|SourceStart)\s*>/g;
+
+          while (cursor < text.length) {
+            openTagRegex.lastIndex = cursor;
+            const openMatch = openTagRegex.exec(text);
+            if (!openMatch) {
+              // no more tags
+              const rem = text.slice(cursor);
+              if (rem) segs.push({ type: 'text', value: rem });
+              break;
+            }
+
+            const openIndex = openMatch.index;
+            // push preceding text
+            if (openIndex > cursor) {
+              segs.push({ type: 'text', value: text.slice(cursor, openIndex) });
+            }
+
+            const tagName = openMatch[1];
+            const lower = tagName.toLowerCase();
+            // determine closing tag variants
+            let closeRegex: RegExp;
+            if (lower.startsWith('link')) {
+              // accept </linkEnd> or </linkStart>
+              closeRegex = /<\s*\/\s*(linkEnd|linkStart|LinkStart)\s*>/gi;
+            } else {
+              closeRegex = /<\s*\/\s*(sourceStart|SourceStart)\s*>/gi;
+            }
+
+            // search for close
+            closeRegex.lastIndex = openTagRegex.lastIndex;
+            const closeMatch = closeRegex.exec(text);
+            let inner = '';
+            if (closeMatch) {
+              inner = text.slice(openTagRegex.lastIndex, closeMatch.index);
+              cursor = closeRegex.lastIndex;
+            } else {
+              // no close found - take rest
+              inner = text.slice(openTagRegex.lastIndex);
+              cursor = text.length;
+            }
+
+            if (lower.startsWith('link')) {
+              segs.push({ type: 'link', value: inner });
+            } else {
+              segs.push({ type: 'source', value: inner });
+            }
+          }
+
+          return segs;
+        };
+
+        // Convert any plain-string content that contains inline tags into Segment[] so rendering matches streamed responses
+        const normalized = (data.chat || []).map(msg => {
+          if (msg && typeof msg.content === 'string' && msg.content.includes('<')) {
+            try {
+              const parsed = parseInlineTags(msg.content);
+              // If parsing produced only a single text segment identical to original, keep string to avoid unnecessary change
+              if (parsed.length === 1 && parsed[0].type === 'text' && parsed[0].value === msg.content) {
+                return msg;
+              }
+              return { ...msg, content: parsed } as Message;
+            } catch (e) {
+              return msg;
+            }
+          }
+          return msg;
+        });
+
+        setMessages(normalized);
       } catch (error) {
         console.error('Error fetching messages:', error);
       }
