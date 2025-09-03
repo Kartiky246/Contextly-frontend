@@ -237,7 +237,12 @@ const Chat: React.FC<ChatProps> = ({ sessionId }) => {
         };
 
         // Convert any plain-string content that contains inline tags into Segment[] so rendering matches streamed responses
-        const normalized = (data.chat || []).map(msg => {
+        const normalized = (data.chat.sort((a,b)=>{
+            if(a.timeStamp!==b.timeStamp){
+              return new Date(a.timeStamp!).getTime() - new Date(b.timeStamp!).getTime()
+            }
+            return a.role.toLowerCase() === 'assistant' ? 1 : -1
+        }) || []).map(msg => {
           if (msg && typeof msg.content === 'string' && msg.content.includes('<')) {
             try {
               const parsed = parseInlineTags(msg.content);

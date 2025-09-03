@@ -10,7 +10,6 @@ interface CreateSessionModalProps {
 }
 
 const CreateSessionModal: React.FC<CreateSessionModalProps> = ({ isOpen, onClose, onCreateSession }) => {
-  console.log('CreateSessionModal props:', { isOpen });
   
   const [sessionName, setSessionName] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);

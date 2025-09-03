@@ -10,7 +10,6 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
-  console.log('Modal props:', { isOpen, title });
   
   if (!isOpen) return null;
 
